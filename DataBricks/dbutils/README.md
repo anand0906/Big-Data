@@ -75,6 +75,7 @@ fsutils
         <p><strong>Real-time Example:</strong></p>
         <p>Let's list the files in the <code>/mnt/data</code> directory.</p>
         <p>Python Code:</p>
+    </li>
 
 ```python
 files = dbutils.fs.ls("/mnt/data")
