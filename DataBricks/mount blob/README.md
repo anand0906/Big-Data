@@ -10,6 +10,7 @@
 <ol>
   <li>Search for <strong>Key Vault</strong> in Azure Portal and click <strong>Create</strong>.</li>
   <li>Enter the required details like <strong>Key Vault Name</strong> and <strong>Resource Group</strong>, then click <strong>Create</strong>.</li>
+  <li>Then, assign yourself and azuredatabricks with role of 'Key Vault Adminstrator', so that databricks can communicate with keyvault</li>
   <li>Once created, go to your Key Vault and select <strong>Secrets</strong> under the Settings section.</li>
   <li>Click <strong>Generate/Import</strong> and store your <strong>Storage Account Access Key</strong>.</li>
 </ol>
@@ -19,7 +20,7 @@
   <li>In Databricks, use the following URL to access the Secret Scope creation page: 
     <code>https://<databricks-instance>#secrets/createScope</code></li>
   <li>Enter a name for the secret scope, for example, <strong>my-secret-scope</strong>.</li>
-  <li>If you're using Azure Key Vault, provide the <strong>Key Vault DNS Name</strong> and <strong>Resource ID</strong>.</li>
+  <li>If you're using Azure Key Vault, provide the <strong>Key Vault DNS Name</strong> and <strong>Resource ID</strong>. it can be availble in properties section of keyvalaut</li>
   <li>Click <strong>Create</strong> to finish setting up the scope.</li>
 </ol>
 
@@ -127,6 +128,7 @@
 <p><strong>Step 4: Create a Key Vault</strong></p>
 <ol>
   <li>In the Azure Portal, search for <strong>Key Vault</strong> and create a new one.</li>
+  <li>Then, assign yourself and azuredatabricks with role of 'Key Vault Adminstrator', so that databricks can communicate with keyvault</li>
   <li>Once created, go to <strong>Secrets</strong> and store the following values:
     <ul>
       <li><strong>App ID</strong> (Application Client ID)</li>
@@ -149,7 +151,7 @@
 <p><strong>Step 6: Create a Databricks Secret Scope to Connect to Key Vault</strong></p>
 <ol>
   <li>In Databricks, navigate to the URL: <code>https://&lt;databricks-instance&gt;#secrets/createScope</code>.</li>
-  <li>Create a scope (e.g., <code>my-keyvault-scope</code>) and provide the Key Vault URI and resource ID.</li>
+  <li>Create a scope (e.g., <code>my-keyvault-scope</code>) and provide the Key Vault URI and resource ID.  it can be availble in properties section of keyvalaut</li>
 </ol>
 
 <p><strong>Step 7: Mount ADLS in Databricks</strong></p>
