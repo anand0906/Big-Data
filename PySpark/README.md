@@ -60,198 +60,143 @@
 <p>This guide will cover all possible ways to create a Spark Session with examples and detailed explanations.</p>
 
 <ol>
-    <li>
-        <p><strong>Basic Spark Session Creation</strong></p>
-        <p>This is the simplest way to create a Spark session in a local or basic setup. It’s perfect for development, local testing, and learning purposes.</p>       
-        <p><strong>Code Example:</strong></p>
-               
-        ```python
-        from pyspark.sql import SparkSession
-
-        # Create a Spark Session
-        spark = SparkSession.builder \
-            .appName("BasicSparkApp") \
-            .getOrCreate()
-        ```
-        
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>appName("BasicSparkApp"):</strong> Defines the name of your Spark application. This name appears in the Spark UI and logs.</li>
-            <li><strong>getOrCreate():</strong> Creates a new Spark session if none exists; otherwise, it returns the existing session.</li>
-        </ul>
-    </li>
-    
-    <li>
-        <p><strong>Spark Session with Custom Configuration</strong></p>
-        <p>In larger applications or when working with more complex workloads, you may need to tweak the default configurations like memory, shuffle partitions, etc.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("CustomConfigApp") \
-            .config("spark.executor.memory", "2g") \
-            .config("spark.executor.cores", "2") \
-            .config("spark.sql.shuffle.partitions", "200") \
-            .getOrCreate()
-        ```
-        
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>config("spark.executor.memory", "2g"):</strong> Allocates 2 GB of memory per executor.</li>
-            <li><strong>config("spark.executor.cores", "2"):</strong> Uses 2 CPU cores per executor.</li>
-            <li><strong>config("spark.sql.shuffle.partitions", "200"):</strong> Sets the number of partitions during shuffles (when data is grouped or sorted).</li>
-        </ul>
-    </li>
-    
-    <li>
-        <p><strong>Spark Session with a Master URL for Cluster Execution</strong></p>
-        <p>When running Spark in a cluster mode (like on YARN, Kubernetes, or Mesos), you need to specify a <strong>master URL</strong>. This tells Spark where to run the job.</p>
-        
-        <p><strong>Code Example (Running Locally with 4 Threads):</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("LocalClusterApp") \
-            .master("local[4]") \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>master("local[4]"):</strong> Tells Spark to run the job locally with 4 threads.</li>
-        </ul>
-        
-        <p><strong>Code Example (Running on YARN Cluster):</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("YarnClusterApp") \
-            .master("yarn") \
-            .config("spark.executor.instances", "5") \
-            .config("spark.executor.memory", "4g") \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>master("yarn"):</strong> Specifies that the job should run on a YARN cluster.</li>
-            <li><strong>config("spark.executor.instances", "5"):</strong> Uses 5 executor instances.</li>
-            <li><strong>config("spark.executor.memory", "4g"):</strong> Allocates 4 GB of memory for each executor.</li>
-        </ul>
-    </li>
-    
-    <li>
-        <p><strong>Spark Session with Hive Support</strong></p>
-        <p>If your Spark application needs to interact with <strong>Hive</strong> (a data warehouse system built on top of Hadoop), you can enable Hive support in your Spark session.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("HiveSupportApp") \
-            .enableHiveSupport() \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>enableHiveSupport():</strong> Enables Hive support in the Spark session, allowing Spark to read from/write to Hive tables and use Hive-specific optimizations.</li>
-        </ul>
-    </li>
-
-    <li>
-        <p><strong>Spark Session with Dynamic Resource Allocation</strong></p>
-        <p>In distributed environments, you may want Spark to dynamically allocate resources like executors depending on the workload. This helps in efficient resource usage.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("DynamicAllocationApp") \
-            .config("spark.dynamicAllocation.enabled", "true") \
-            .config("spark.dynamicAllocation.minExecutors", "1") \
-            .config("spark.dynamicAllocation.maxExecutors", "10") \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>config("spark.dynamicAllocation.enabled", "true"):</strong> Enables dynamic allocation of executors.</li>
-            <li><strong>config("spark.dynamicAllocation.minExecutors", "1"):</strong> Sets the minimum number of executors to 1.</li>
-            <li><strong>config("spark.dynamicAllocation.maxExecutors", "10"):</strong> Sets the maximum number of executors to 10.</li>
-        </ul>
-    </li>
-
-    <li>
-        <p><strong>Spark Session with Specific JARs and Packages</strong></p>
-        <p>Sometimes, you need additional JARs or external libraries in your Spark application. You can specify these during session creation.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("WithJarsApp") \
-            .config("spark.jars", "/path/to/jar1,/path/to/jar2") \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>config("spark.jars", "/path/to/jar1,/path/to/jar2"):</strong> Includes external JAR files in the Spark session, allowing Spark to use functionalities provided by those JARs.</li>
-        </ul>
-    </li>
-
-    <li>
-        <p><strong>Spark Session with Logging Configuration</strong></p>
-        <p>You may want to customize how Spark logs messages during execution. This can be done by specifying logging properties.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("LoggingApp") \
-            .config("spark.eventLog.enabled", "true") \
-            .config("spark.eventLog.dir", "/tmp/spark-events") \
-            .getOrCreate()
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>config("spark.eventLog.enabled", "true"):</strong> Enables event logging for Spark jobs.</li>
-            <li><strong>config("spark.eventLog.dir", "/tmp/spark-events"):</strong> Specifies the directory where logs will be stored.</li>
-        </ul>
-    </li>
-
-    <li>
-        <p><strong>Spark Session with Catalog Support (For Catalog Operations)</strong></p>
-        <p>If you need to work with the Spark Catalog (a way to manage databases, tables, and metadata), the Spark session allows you to interact with it.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
-        spark = SparkSession.builder \
-            .appName("CatalogApp") \
-            .getOrCreate()
-
-        # List all databases in the catalog
-        databases = spark.catalog.listDatabases()
+    <li><strong>Basic Spark Session Creation</strong></li>
+    <p>This is the simplest way to create a Spark session in a local or basic setup. It’s perfect for development, local testing, and learning purposes.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        from pyspark.sql import SparkSession<br><br>
+        # Create a Spark Session<br>
+        spark = SparkSession.builder<br>
+        .appName("BasicSparkApp")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>appName("BasicSparkApp")</strong>: Defines the name of your Spark application. This name appears in the Spark UI and logs.</li>
+        <li><strong>getOrCreate()</strong>: Creates a new Spark session if none exists; otherwise, it returns the existing session.</li>
+    </ul>
+    <li><strong>Spark Session with Custom Configuration</strong></li>
+    <p>In larger applications or when working with more complex workloads, you may need to tweak the default configurations like memory, shuffle partitions, etc. You can customize Spark’s behavior by passing key-value configurations.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("CustomConfigApp")<br>
+        .config("spark.executor.memory", "2g")<br>
+        .config("spark.executor.cores", "2")<br>
+        .config("spark.sql.shuffle.partitions", "200")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>config("spark.executor.memory", "2g")</strong>: Allocates 2 GB of memory per executor.</li>
+        <li><strong>config("spark.executor.cores", "2")</strong>: Uses 2 CPU cores per executor.</li>
+        <li><strong>config("spark.sql.shuffle.partitions", "200")</strong>: Sets the number of partitions during shuffles.</li>
+    </ul>
+    <li><strong>Spark Session with a Master URL for Cluster Execution</strong></li>
+    <p>When running Spark in a cluster mode (like on YARN, Kubernetes, or Mesos), you need to specify a <strong>master URL</strong>. This tells Spark where to run the job (on a local machine, a cluster, or in a distributed environment).</p>   
+    <p><strong>Code Example (Running Locally with 4 Threads):</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("LocalClusterApp")<br>
+        .master("local[4]")<br>
+        .getOrCreate()
+    </code>   
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>master("local[4]")</strong>: This tells Spark to run the job locally with 4 threads.</li>
+    </ul>
+    <p><strong>Code Example (Running on YARN Cluster):</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("YarnClusterApp")<br>
+        .master("yarn")<br>
+        .config("spark.executor.instances", "5")<br>
+        .config("spark.executor.memory", "4g")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>master("yarn")</strong>: Specifies that the job should run on a YARN cluster.</li>
+        <li><strong>config("spark.executor.instances", "5")</strong>: Uses 5 executor instances.</li>
+        <li><strong>config("spark.executor.memory", "4g")</strong>: Allocates 4 GB of memory for each executor.</li>
+    </ul>
+    <li><strong>Spark Session with Hive Support</strong></li>
+    <p>If your Spark application needs to interact with <strong>Hive</strong> (a data warehouse system built on top of Hadoop), you can enable Hive support in your Spark session.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("HiveSupportApp")<br>
+        .enableHiveSupport()<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>enableHiveSupport()</strong>: Enables Hive support in the Spark session.</li>
+    </ul>
+    <li><strong>Spark Session with Dynamic Resource Allocation</strong></li>
+    <p>In distributed environments, you may want Spark to dynamically allocate resources like executors depending on the workload. This helps in efficient resource usage.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("DynamicAllocationApp")<br>
+        .config("spark.dynamicAllocation.enabled", "true")<br>
+        .config("spark.dynamicAllocation.minExecutors", "1")<br>
+        .config("spark.dynamicAllocation.maxExecutors", "10")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>config("spark.dynamicAllocation.enabled", "true")</strong>: Enables dynamic allocation of executors.</li>
+        <li><strong>config("spark.dynamicAllocation.minExecutors", "1")</strong>: Sets the minimum number of executors to 1.</li>
+        <li><strong>config("spark.dynamicAllocation.maxExecutors", "10")</strong>: Sets the maximum number of executors to 10.</li>
+    </ul>
+    <li><strong>Spark Session with Specific JARs and Packages</strong></li>
+    <p>Sometimes, you need additional JARs or external libraries in your Spark application (e.g., for integrating with specific databases). You can specify these during session creation.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("WithJarsApp")<br>
+        .config("spark.jars", "/path/to/jar1,/path/to/jar2")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>config("spark.jars", "/path/to/jar1,/path/to/jar2")</strong>: Includes external JAR files in the Spark session.</li>
+    </ul>
+    <li><strong>Spark Session with Logging Configuration</strong></li>
+    <p>You may want to customize how Spark logs messages during execution. This can be done by specifying logging properties.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("LoggingApp")<br>
+        .config("spark.eventLog.enabled", "true")<br>
+        .config("spark.eventLog.dir", "/tmp/spark-events")<br>
+        .getOrCreate()
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>config("spark.eventLog.enabled", "true")</strong>: Enables event logging for Spark jobs.</li>
+        <li><strong>config("spark.eventLog.dir", "/tmp/spark-events")</strong>: Specifies the directory where logs will be stored.</li>
+    </ul>
+    <li><strong>Spark Session with Catalog Support (For Catalog Operations)</strong></li>
+    <p>If you need to work with the Spark Catalog (a way to manage databases, tables, and metadata), the Spark session allows you to interact with it.</p>
+    <p><strong>Code Example:</strong></p>
+    <code>
+        spark = SparkSession.builder<br>
+        .appName("CatalogApp")<br>
+        .getOrCreate()<br><br>
+        # List all databases in the catalog<br>
+        databases = spark.catalog.listDatabases()<br>
         print(databases)
-        ```
-
-        <p><strong>Explanation:</strong></p>
-        <ul>
-            <li><strong>spark.catalog.listDatabases():</strong> Lists all databases available in the catalog.</li>
-        </ul>
-    </li>
-
-    <li>
-        <p><strong>Spark Session with Multiple Configurations</strong></p>
-        <p>You can combine several configurations while creating a Spark session, depending on your use case. For example, you might need to run on YARN, enable dynamic allocation, and log events.</p>
-        
-        <p><strong>Code Example:</strong></p>
-        
-        ```python
+    </code>
+    <p><strong>Explanation:</strong></p>
+    <ul>
+        <li><strong>spark.catalog.listDatabases()</strong>: Lists all databases available in the catalog.</li>
+    </ul>
+    <li><strong>Spark Session with Multiple Configurations</strong></li>
+    <p>You can combine several configurations while creating a Spark session, depending on your us        
+      <p><strong>Code Example:</strong></p>
+   	<code>
         spark = SparkSession.builder \
             .appName("AdvancedApp") \
             .master("yarn") \
@@ -259,7 +204,7 @@
             .config("spark.dynamicAllocation.enabled", "true") \
             .config("spark.eventLog.enabled", "true") \
             .getOrCreate()
-        ```
+     <</code>
     </li>
 </ol>
 
