@@ -849,3 +849,145 @@ df.createOrReplaceTempView("people")<br><br>
 result = spark.sql("SELECT Name, Age FROM people WHERE Age > 25")<br>
 result.show()
 </code>
+
+
+<h1>Reading Excel,XML,Json</h1>
+<p><strong>1. Excel Files Reading and Writing Using PySpark</strong></p>
+
+<p>PySpark does not provide direct support for reading and writing Excel files. However, we can use external libraries such as <strong>com.crealytics.spark.excel</strong> to work with Excel files. This requires the Spark Excel package.</p>
+
+<p><strong>Reading Excel Files</strong></p>
+
+<ol>
+    <li>You need to add the required package to your Spark session to read Excel files.</li>
+</ol>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+from pyspark.sql import SparkSession<br>
+spark = SparkSession.builder.config("spark.jars.packages", "com.crealytics:spark-excel_2.12:0.13.5").getOrCreate()<br>
+df = spark.read.format("com.crealytics.spark.excel").option("header", "true").option("inferSchema", "true").load("path_to_excel_file.xlsx")<br>
+df.show()
+</code>
+</p>
+
+<ul>
+    <li><strong>Options for Reading Excel Files:</strong></li>
+</ul>
+
+<ol>
+    <li><strong>header:</strong> Specifies whether the first row in the Excel file is treated as a header.</li>
+    <li><strong>inferSchema:</strong> Automatically infers the schema of the data.</li>
+    <li><strong>sheetName:</strong> You can specify the sheet name if the Excel file has multiple sheets.</li>
+</ol>
+
+<p><strong>Writing Excel Files</strong></p>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+df.write.format("com.crealytics.spark.excel").option("header", "true").mode("overwrite").save("path_to_output_excel_file.xlsx")
+</code>
+</p>
+
+<p><strong>2. XML Files Reading and Writing Using PySpark</strong></p>
+
+<p>For reading and writing XML files, PySpark uses the <strong>spark-xml</strong> library. You need to install the package <strong>com.databricks.spark.xml</strong>.</p>
+
+<p><strong>Reading XML Files</strong></p>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+spark = SparkSession.builder.config("spark.jars.packages", "com.databricks:spark-xml_2.12:0.11.0").getOrCreate()<br>
+df = spark.read.format("xml").option("rowTag", "record").load("path_to_xml_file.xml")<br>
+df.show()
+</code>
+</p>
+
+<ul>
+    <li><strong>Options for Reading XML Files:</strong></li>
+</ul>
+
+<ol>
+    <li><strong>rowTag:</strong> Defines the tag that is used as the root for each row.</li>
+    <li><strong>inferSchema:</strong> Automatically infers the schema of the XML file.</li>
+    <li><strong>attributePrefix:</strong> Prefix to use for attributes in the XML.</li>
+</ol>
+
+<p><strong>Writing XML Files</strong></p>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+df.write.format("xml").option("rootTag", "records").option("rowTag", "record").save("path_to_output_xml_file.xml")
+</code>
+</p>
+
+<p><strong>3. JSON Files Reading and Writing Using PySpark</strong></p>
+
+<p>PySpark provides built-in support for reading and writing JSON files.</p>
+
+<p><strong>Reading JSON Files</strong></p>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+spark = SparkSession.builder.appName("JSONExample").getOrCreate()<br>
+df = spark.read.json("path_to_json_file.json")<br>
+df.show()
+</code>
+</p>
+
+<ul>
+    <li><strong>Options for Reading JSON Files:</strong></li>
+</ul>
+
+<ol>
+    <li><strong>multiline:</strong> Set to true if the JSON data spans multiple lines (i.e., pretty-printed JSON).</li>
+</ol>
+
+<p><strong>Writing JSON Files</strong></p>
+
+<ul>
+    <li><strong>Example:</strong></li>
+</ul>
+
+<p>
+<code>
+df.write.json("path_to_output_json_file.json")
+</code>
+</p>
+
+<ul>
+    <li><strong>Options for Writing JSON Files:</strong></li>
+</ul>
+
+<ol>
+    <li><strong>mode:</strong> Specifies the write mode, such as overwrite, append, ignore, or error.</li>
+    <li><strong>compression:</strong> Allows compression of the output files (e.g., gzip, snappy).</li>
+</ol>
+
+<p><strong>Summary</strong></p>
+
+<ul>
+    <li><strong>Excel:</strong> You need to use the <strong>com.crealytics.spark.excel</strong> package for reading and writing Excel files.</li>
+    <li><strong>XML:</strong> PySpark requires the <strong>com.databricks.spark.xml</strong> library to work with XML files.</li>
+    <li><strong>JSON:</strong> PySpark has built-in support for JSON files.</li>
+</ul>
