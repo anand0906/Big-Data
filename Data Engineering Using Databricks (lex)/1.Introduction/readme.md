@@ -118,21 +118,6 @@ The name comes from:
 ✅ In short:
 **Databricks is a cloud platform that helps companies manage, process, and analyze big data and AI all in one place.**
 
-# Databricks Architecture Complete Guide 🏗️
-
-## Table of Contents
-- [Architecture Overview](#architecture-overview)
-- [Control Plane vs Data Plane](#control-plane-vs-data-plane)
-- [Core Components](#core-components)
-- [How Components Work Together](#how-components-work-together)
-- [Data Flow Architecture](#data-flow-architecture)
-- [Multi-Cloud Architecture](#multi-cloud-architecture)
-- [Security Architecture](#security-architecture)
-- [Real-World Example](#real-world-example)
-- [Architecture Benefits](#architecture-benefits)
-
----
-
 ## Architecture Overview
 
 ### Simple Analogy 🏢
