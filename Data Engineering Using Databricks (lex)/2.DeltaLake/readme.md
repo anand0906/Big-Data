@@ -104,5 +104,3 @@ With Delta Lake:
 It makes **big data storage trustworthy, scalable, and ready for analytics & AI.**
 
 ---
-
-Do you also want me to explain **how Delta Lake turns a Data Lake into a Lakehouse** (the bridge concept we talked about)?
