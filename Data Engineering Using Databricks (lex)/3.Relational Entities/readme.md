@@ -6,6 +6,7 @@ Databricks Lakehouse is a modern data platform that combines the best features o
 
 Think of it like organizing files on your computer - you have folders within folders, and each level serves a specific purpose.
 
+<img src="https://docs.azure.cn/en-us/databricks/_static/images/unity-catalog/object-model.png" />
 ## The Six Primary Objects
 
 ### 1. 🗄️ Metastore
